@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- https://mybatis.org/mybatis-3/ko/getting-started.html -->
+<!-- 테이블마다 mapper 클래스를 하나씩 만들어주기 -->
+<mapper namespace="kr.basic.mybatis.CommunityBoardMapper">
+<!-- <select id="memberList" resultType="kr.basic.model.MemberVO"> -->
+	<!-- 글 목록 가져오기 -->
+	<select id="communityBoardList" resultType="communityboard">
+	select * from communityboard
+	order by num_commuboard desc
+	</select>
+	
+	<!-- 새 글 쓰기 -->
+	<insert id="communityBoardInsert" parameterType="communityboard">
+    insert into communityboard(userid, title, main, img)
+    values (#{userid}, #{title}, #{main}, #{img})
+    </insert>
+	
+	<!-- 글 삭제하기 -->
+	<delete id="communityBoardDelete" parameterType="int">
+	delete from communityboard where num_commuboard=#{num}
+	</delete>
+	
+	<!-- 글 수정하기 -->
+	<update id="communityBoardUpdate" parameterType="communityboard">
+	update communityboard set title=#{title}, main=#{main}, img=#{img} where num_commuboard=#{num}
+	</update>
+	
+	<!-- 글 검색하기 -->
+	<select id="communityBoardSearch" parameterType="String" resultType="communityboard">
+	select * from communityboard where title like '%#{searchWord}%' or main like '%#{searchWord}%'
+	</select>
+	
+	<!-- 번호로 글 찾기 -->
+	<select id="communityBoardReading" parameterType="int" resultType="communityboard">
+	select * from communityboard where num_commuboard=#{num}
+	</select>
+	
+</mapper>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- https://mybatis.org/mybatis-3/ko/getting-started.html -->
+<!-- 테이블마다 mapper 클래스를 하나씩 만들어주기 -->
+<mapper namespace="kr.basic.mybatis.EventMapper">
+<!-- <select id="memberList" resultType="kr.basic.model.MemberVO"> -->
+	
+	<!-- 가장 마지막 이벤트 가져오기  -->
+	<select id="takeEvent" resultType="event">
+	select * from eventinfo 
+	order by num_event desc 
+	limit 1;
+	</select>
+	
+	<insert id="makeNewEvent" parameterType="event">
+	insert into eventinfo (title, start_date, end_date, event_img) value
+	(#{title}, #{start_date}, #{end_date}, #{event_img})
+	</insert>
+	
+	
+</mapper>

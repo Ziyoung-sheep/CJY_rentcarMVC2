@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- https://mybatis.org/mybatis-3/ko/getting-started.html -->
+<!-- 테이블마다 mapper 클래스를 하나씩 만들어주기 -->
+<mapper namespace="kr.basic.mybatis.ReservationMapper">
+<!-- <select id="memberList" resultType="kr.basic.model.MemberVO"> -->
+
+	<!-- 전체 예약 리스트 확인하기 -->
+	<select id="reservationList" resultType="reservation">
+	  select * from reservation
+	</select>
+	
+	<!-- 예약 추가하기 -->
+	<insert id="reservationInsert" parameterType="reservation">
+    insert into reservation(num, userid, qty, dday, rday, usein, usewifi, usenavi, useseat)
+    values (#{num}, #{userid}, #{qty}, #{dday}, #{rday}, #{usein}, #{usewifi}, #{usenavi}, #{useseat})
+    </insert>
+    
+    <!-- 예약 삭제하기 -->
+    <delete id="reservationDelete" parameterType="int">
+	delete from reservation where reserve_seq=#{num}
+	</delete>
+	
+	<!-- id로 예약 리스트 확인하기 -->
+	<select id="reservationListFromId" parameterType="String" resultType="reservation">
+	select * from reservation where userid=#{id}
+	order by reserve_seq desc
+	</select>
+	
+	<!-- 빌린 차량 번호로 몇 대 대여중인지 -->
+	<select id="countRentNow" parameterType="int" resultType="int">
+	select count(*) from reservation where num=#{num};
+	</select>
+	
+	<!-- 해당 날짜에 해당하는 차량 번호의 차가 몇 대 대여중인지 -->
+	<select id="sumRbyDateAndNum" parameterType="map" resultType="int">
+	select COALESCE(sum(qty), 0) as rented_qty
+	from reservation
+	Where num=#{num}
+	and rday &lt;= #{startDate}
+	and date_add(rday, interval dday day)> #{startDate};
+	</select>
+	
+	
+	
+	<!-- 예약차량 확인하기 -->
+<!-- 	<select id="getReservedQuantity" parameterType="map" resultType="int">
+    select coalesce(sum(qty), 0)
+    from reservation
+    where carNum = #{carNum}
+    and rday = #{rday}
+    and dday = #{dday}
+	</select> -->
+	
+</mapper>

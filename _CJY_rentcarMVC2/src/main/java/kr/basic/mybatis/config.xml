@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- xml은 위 코드가 있어야 xml파일로 인식한다 -->
+
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration> <!-- configuration 환경설정구성 -->
+
+<properties resource="kr/basic/mybatis/db.properties"/>
+<!-- properties 파일 연결 소환, 이게 있어야 밑에 $작동가능 -->
+
+<!-- kr.basic.model.MemberVO라는 타입의 이름을 member 로 전부 치환해주기 -->
+<!-- 즉 member를 입력하면 kr.basic.model.MemberVO가 출력 -->
+<typeAliases>
+	<typeAlias type="kr.basic.model.RentCarVO" alias="rentCar"/>
+	<typeAlias type="kr.basic.model.UserVO" alias="user"/>
+	<typeAlias type="kr.basic.model.ReservationVO" alias="reservation"/>
+	<typeAlias type="kr.basic.model.CommunityBoardVO" alias="communityboard"/>
+	<typeAlias type="kr.basic.model.CustomerServiceVO" alias="customerservice"/>
+	<typeAlias type="kr.basic.model.EventVO" alias="event"/>
+</typeAliases>
+
+  <environments default="development">
+    <environment id="development">
+      <transactionManager type="JDBC"/>
+      <dataSource type="POOLED">
+      <!-- $는 JSTL 어디서 설정을 가져오기 -->
+        <property name="driver" value="${driver}"/>
+        <property name="url" value="${url}"/>
+        <property name="username" value="${username}"/>
+        <property name="password" value="${password}"/>
+      </dataSource>
+    </environment>
+  </environments>
+  <mappers>
+    <mapper resource="kr/basic/mybatis/RentCarMapper.xml"/>
+    <mapper resource="kr/basic/mybatis/ReservationMapper.xml"/>
+    <mapper resource="kr/basic/mybatis/UserMapper.xml"/>
+    <mapper resource="kr/basic/mybatis/CommunityBoardMapper.xml"/>
+    <mapper resource="kr/basic/mybatis/CustomerServiceMapper.xml"/>
+    <mapper resource="kr/basic/mybatis/EventMapper.xml"/>
+  </mappers>
+</configuration>
+
+<!-- https://mybatis.org/mybatis-3/ko/getting-started.html -->

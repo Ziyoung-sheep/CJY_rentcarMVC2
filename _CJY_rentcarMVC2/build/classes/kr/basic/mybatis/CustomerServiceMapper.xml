@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- https://mybatis.org/mybatis-3/ko/getting-started.html -->
+<!-- 테이블마다 mapper 클래스를 하나씩 만들어주기 -->
+<mapper namespace="kr.basic.mybatis.CustomerServiceMapper">
+<!-- <select id="memberList" resultType="kr.basic.model.MemberVO"> -->
+	
+	<!-- 전체글 가져오기 -->
+	<select id="customerServiceList" resultType="customerservice">
+	select * from customerservice;
+	order by num_qna desc
+	</select>
+	
+	
+	<!-- id로 글 목록 가져오기  -->
+	<select id="customerServiceListFromId" parameterType="String" resultType="customerservice">
+	select * from customerservice where userid=#{id}
+	order by num_qna desc
+	</select>
+	
+	<!-- 새 글 쓰기 -->
+	<insert id="customerserviceInsert" parameterType="customerservice">
+    insert into customerservice(userid, title, main)
+    values (#{userid}, #{title}, #{main})
+    </insert>
+    
+    <!--글 수정하기: 근데 답변 완료 안된것만 수정하기 -->
+    <update id="customerserviceUpdate" parameterType="customerservice">
+	update customerservice set title=#{title}, main=#{main} where num=#{num}
+	</update>
+    
+    <!-- 답변 입력하기 -->
+    <update id="customerserviceAnswerUpdate" parameterType="map">
+	update customerservice set answer=#{answer} where num=#{num}
+	</update>
+	
+	<!-- 글 삭제하기 -->
+	<delete id="customerserviceDelete" parameterType="int">
+	delete from customerservice where num=#{num}
+	</delete>
+	
+		<!-- 번호로 글 찾기 -->
+	<select id="customerServiceReading" parameterType="int" resultType="customerservice">
+	select * from customerservice where num_qna=#{num}
+	</select>
+	
+	
+</mapper>

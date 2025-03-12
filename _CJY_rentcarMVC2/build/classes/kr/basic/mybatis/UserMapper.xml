@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- https://mybatis.org/mybatis-3/ko/getting-started.html -->
+<!-- 테이블마다 mapper 클래스를 하나씩 만들어주기 -->
+<mapper namespace="kr.basic.mybatis.UserMapper">
+<!-- <select id="memberList" resultType="kr.basic.model.MemberVO"> -->
+	
+	<!-- 유저 리스트 -->
+	<select id="userList" resultType="user">
+	select * from user
+	</select>
+	
+	<!-- 회원가입 -->
+	<insert id="userJoin" parameterType="user">
+    insert into user(name, userid, pwd, email, phone)
+    values (#{name}, #{userid}, #{pwd}, #{email}, #{phone})
+    </insert>
+	
+	<!-- 회원탈퇴 : 이거 로그인 되어있는 넘버로 하는게 더 나을지도..생각해보고 수정하든지 하자-->
+	<delete id="userDelete" parameterType="String">
+	delete from user where userid=#{id}
+	</delete>
+<!-- 	<delete id="userDelete" parameterType="int">
+	delete from user where num=#{num}
+	</delete>
+ -->
+ 	
+	<!-- 아이디 검색해서 비밀번호 리턴하기 -->
+	<!-- 아이디 중복검사 이걸로 해도 될듯?? null이 나오면 아아디 없는것 -->
+	<select id="findPwd" parameterType="String" resultType="String">
+	select pwd from user where userid=#{id}
+	</select>
+	
+	<!-- 아이디와 비밀번호 확인하기 -->
+	<select id="checkLogin" parameterType="map" resultType="Integer">
+	select num from user where userid=#{id} and pwd=#{pw}
+	</select>
+	
+	<!-- 아이디로 회원번호 찾기 -->
+	<select id="getUserNum" parameterType="String" resultType="Integer">
+	select num from user where userid=#{id}
+	</select>
+	
+	<!-- 회원번호로 아이디 찾기 -->
+	<select id="getUserId" parameterType="Integer" resultType="String">
+	select userid from user where num=#{num}
+	</select>
+	
+<!-- 아이디 중복검사
+	<select id="checkId" parameterType="String" resultType="int">
+	select num from user where id=#{id}
+	</select> 
+	-->
+	
+</mapper>

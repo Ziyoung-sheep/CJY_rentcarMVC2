@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- https://mybatis.org/mybatis-3/ko/getting-started.html -->
+<!-- 테이블마다 mapper 클래스를 하나씩 만들어주기 -->
+<mapper namespace="kr.basic.mybatis.RentCarMapper">
+<!-- <select id="memberList" resultType="kr.basic.model.MemberVO"> -->
+	
+	<!-- 등록된 차량 리스트 확인하기 -->
+	<select id="rentcarList" resultType="rentCar">
+	select * from rentcar
+	</select>
+	
+	<!-- 카데고리만 적용한 리스트 -->
+	<select id="rentcarListByCategory" parameterType="integer" resultType="rentCar">
+	select * from rentcar where category=#{category}
+	</select>
+	
+	<!-- 컴파니만 적용한 리스트 -->
+	<select id="rentcarListByCompany" parameterType="String" resultType="rentCar">
+	select * from rentcar where company=#{company}
+	</select>
+	
+	<!-- 카테고리와 컴퍼니를 적용한 리스트 -->
+	<select id="rentcarListByCategoryAndCompany" parameterType="map" resultType="rentCar">
+	select * from rentcar where category=#{category} and company=#{company}
+	</select>
+	
+	<!-- 차량 번호로 대여 가능 대수 확인-->
+	<!-- 대여 가능한 차량 리스트: 차량 대여중인 것 카운트 세서 랜트카 총 수량에서 마이너스해서 0이면 안내보내는 식으로 해야겠네 -->
+	<select id="restRentcarList" parameterType="integer" resultType="integer">
+	select (r.total_qty - ifnull(sum(res.qty), 0)) as available_qty
+	from rentcar r
+	left join reservation res ON r.num = res.num
+	where r.num = #{num}
+	group by r.num, r.name, r.total_qty;
+	</select>
+	
+	
+	
+	<!-- 차량 번호로 대여 가능 대수 확인 왜 이상한 오류가 낫다냐-->
+	<select id="getRentCarQty" parameterType="integer" resultType="integer">
+	select total_qty from rentcar where num=#{num};
+	</select>
+	
+	
+	
+	
+	
+	
+	<!-- 새 차량 등록 -->
+	<insert id="rentCarInsert" parameterType="rentCar">
+    insert into rentcar(name, category, price, usepeople, total_qty, company, img, info)
+    values (#{name}, #{category}, #{price}, #{usepeople}, #{total_qty}, #{company}, #{img}, #{info})
+    </insert>
+	
+	<!-- 차량 삭제 -->
+	<delete id="rentCarDelete" parameterType="int">
+	delete from rentcar where num=#{num}
+	</delete>
+	
+	<!-- 차량 보유 수량 변경 -->
+	<update id="rentCarUpdate" parameterType="rentcar">
+	update rentcar set total_qty=#{total_qty} where num=#{num}
+	</update>
+	
+	
+	<!-- 소형 중형 대형 차량 검색하기 1: 소형 2: 중형 3: 대형-->
+	<select id="findRentCarSize" parameterType="int" resultType="rentCar">
+	select * from rentcar where category=#{category}
+	</select>
+	
+	<!-- 자동차 상세보기 -->
+	<select id="rentCarContent" parameterType="int" resultType="rentCar">
+	select * from rentcar where num=#{num}
+	</select>
+	
+
+	
+	
+</mapper>
